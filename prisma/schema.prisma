@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,55 +7,70 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
- 
 
- 
 model User {
-  id         String    @id @default(uuid())
-  email      String    @unique
-  name       String?
-  password   String
-  role       Role      @default(USER)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  authSessions AuthSession[]
 }
- 
+
+model AuthSession {
+  id         String    @id @default(cuid())
+  userId     String
+  token      String    @db.Text
+  expiresAt  DateTime
+  lastUsedAt DateTime? @default(now())
+  revoked    Boolean   @default(false)
+  revokedAt  DateTime?
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("auth_sessions")
+}
 
 model Destination {
-  id           String        @id @default(uuid())
-  title        String
-  slug         String        @unique
-  description  String?
-  address      String?
-  price      Int?
-  coordinate     Float?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
- 
-  photos       Photo[]
-  reviews      Review[]
-  bookings     Booking[]
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  description String?
+  address     String?
+  price       Int?
+  coordinate  Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  photos   Photo[]
+  reviews  Review[]
+  bookings Booking[]
 
   @@index([slug])
 }
 
 model Photo {
-  id            String      @id @default(uuid())
+  id            String       @id @default(uuid())
   destinationId String?
   destination   Destination? @relation(fields: [destinationId], references: [id])
   url           String
-  photoId           String?
-  uploadedAt    DateTime    @default(now())
+  photoId       String?
+  uploadedAt    DateTime     @default(now())
 }
 
 model Review {
   id            String      @id @default(uuid())
-  email        String
+  email         String
   destinationId String
   destination   Destination @relation(fields: [destinationId], references: [id])
   rating        Int         @default(5)
-  comment         String?
+  comment       String?
   approved      Boolean     @default(false)
   createdAt     DateTime    @default(now())
 
@@ -64,18 +78,18 @@ model Review {
 }
 
 model Booking {
-  id            String      @id @default(uuid())
-  email        String
-  phone        String
-  name        String
+  id            String        @id @default(uuid())
+  email         String
+  phone         String
+  name          String
   destinationId String
-  destination   Destination @relation(fields: [destinationId], references: [id])
-  date     DateTime
-  guests        Int         @default(1)
+  destination   Destination   @relation(fields: [destinationId], references: [id])
+  date          DateTime
+  guests        Int           @default(1)
   totalPrice    Float?
   status        BookingStatus @default(PENDING)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([destinationId])
 }
@@ -99,4 +113,3 @@ enum BookingStatus {
   CANCELLED
   COMPLETED
 }
- 

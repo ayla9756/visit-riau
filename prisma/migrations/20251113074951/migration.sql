@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'EDITOR', 'ADMIN');
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
 -- CreateEnum
 CREATE TYPE "ContentStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'ARCHIVED');
@@ -18,6 +18,21 @@ CREATE TABLE "User" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "auth_sessions" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "lastUsedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "revoked" BOOLEAN NOT NULL DEFAULT false,
+    "revokedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "auth_sessions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -80,6 +95,9 @@ CREATE TABLE "Booking" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
+CREATE INDEX "auth_sessions_userId_idx" ON "auth_sessions"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Destination_slug_key" ON "Destination"("slug");
 
 -- CreateIndex
@@ -90,6 +108,9 @@ CREATE INDEX "Review_destinationId_idx" ON "Review"("destinationId");
 
 -- CreateIndex
 CREATE INDEX "Booking_destinationId_idx" ON "Booking"("destinationId");
+
+-- AddForeignKey
+ALTER TABLE "auth_sessions" ADD CONSTRAINT "auth_sessions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Photo" ADD CONSTRAINT "Photo_destinationId_fkey" FOREIGN KEY ("destinationId") REFERENCES "Destination"("id") ON DELETE SET NULL ON UPDATE CASCADE;

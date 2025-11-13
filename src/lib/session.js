@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
@@ -6,7 +6,7 @@ import { cache } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { JWT_SECRET } from "./env";
 import { redirect } from "next/navigation";
-import prisma from "./db/prisma";
+import prisma from "./prisma";
 
 const encodedKey = new TextEncoder().encode(JWT_SECRET);
 
@@ -163,4 +163,9 @@ export async function deleteSession() {
    }
    (await cookies()).delete("session");
    redirect("/login");
+}
+
+export async function deleteCookie() {
+   const cookieStore = await cookies();
+   cookieStore.delete("token");
 }
