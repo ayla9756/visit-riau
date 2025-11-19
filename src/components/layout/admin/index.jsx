@@ -11,7 +11,7 @@ export default function AdminLayout({ user, children }) {
    }, [user, setUser]);
 
    return (
-      <div className="min-h-dvh w-dvh overflow-y-auto">
+      <div className="min-h-dvh overflow-y-auto">
          <Header user={user} />
          <main>{children}</main>
       </div>

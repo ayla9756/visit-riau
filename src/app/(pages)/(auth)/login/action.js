@@ -6,32 +6,32 @@ import { LoginSchema } from "./schema";
 import prisma from "@/lib/prisma";
 
 export async function action(formData) {
-  const rawData = Object.fromEntries(formData.entries());
-  const parsed = LoginSchema.safeParse(rawData);
+   const rawData = Object.fromEntries(formData.entries());
 
-  if (!parsed.success) {
-    if (!parsed.success)
+   const parsed = LoginSchema.safeParse(rawData);
+
+   if (!parsed.success) {
       return errorResponse(parsed.error.flatten().fieldErrors);
-  }
+   }
 
-  const { email, password } = parsed.data;
+   const { email, password } = parsed.data;
 
-  const user = await prisma.user.findUnique({ where: { email } });
+   const user = await prisma.user.findUnique({ where: { email } });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return errorResponse({
-      email: ["Email atau password salah"],
-      password: ["Email atau password salah"],
-    });
-  }
+   if (!user || !(await bcrypt.compare(password, user.password))) {
+      return errorResponse({
+         email: ["Email atau password salah"],
+         password: ["Email atau password salah"],
+      });
+   }
 
-  await createSession(user);
+   await createSession(user);
 
-  return successResponse();
+   return successResponse();
 }
 
 // Logout Action
 export async function logout() {
-  await deleteSession();
-  redirect("/login");
+   await deleteSession();
+   redirect("/login");
 }
