@@ -1,10 +1,8 @@
+import { withMetadata } from "@/lib/metadata";
 import Form from "./form";
 
-export const metadata = {
-  title: "Halaman Login | Belajar Web Hizratech",
-  description: "Semangat belajar di Hizratech",
-};
+export const generateMetadata = withMetadata("Login");
 
 export default function Page() {
-  return <Form />;
+   return <Form />;
 }

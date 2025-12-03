@@ -1,14 +1,14 @@
 "use server";
 import bcrypt from "bcrypt";
 import { createSession, deleteSession } from "@/lib/session";
-import { errorResponse, successResponse } from "@/lib/response";
-import { LoginSchema } from "./schema";
 import prisma from "@/lib/prisma";
+import { Schema } from "./schema";
+import { errorResponse, successResponse } from "@/lib/response";
+import { redirect } from "next/navigation";
 
 export async function action(formData) {
    const rawData = Object.fromEntries(formData.entries());
-
-   const parsed = LoginSchema.safeParse(rawData);
+   const parsed = Schema.safeParse(rawData);
 
    if (!parsed.success) {
       return errorResponse(parsed.error.flatten().fieldErrors);
@@ -27,7 +27,7 @@ export async function action(formData) {
 
    await createSession(user);
 
-   return successResponse();
+   return redirect("/");
 }
 
 // Logout Action

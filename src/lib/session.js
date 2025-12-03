@@ -36,12 +36,12 @@ export async function decrypt(sessionToken) {
 
       return payload;
    } catch (error) {
-      console.error("JWT verification failed", error);
+      console.log("JWT verification failed", error);
       return null;
    }
 }
 
-//  Create session
+//  Create session user
 export async function createSession(user) {
    const sessionId = uuidv4();
    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 hari
@@ -63,7 +63,12 @@ export async function createSession(user) {
       },
    });
 
-   (await cookies()).set("session", token, {
+   return await setCookie(token, expiresAt);
+}
+
+export async function setCookie(token, expiresAt) {
+   const cookieStore = await cookies();
+   return cookieStore.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
@@ -90,17 +95,16 @@ async function refreshSessionToken(session) {
       },
    });
 
-   (await cookies()).set("session", newToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      expires: expiresAt,
-   });
+   return await setCookie(newToken, expiresAt);
 }
 
 //  Validasi session dari JWT + DB
 export async function verifySession() {
-   const token = (await cookies()).get("session")?.value;
+   const token = await getToken();
+
+   if (!token) {
+      return { isLoggedIn: false, userId: "", sessionId: "" };
+   }
 
    const payload = await decrypt(token);
    if (!payload?.sessionId || !payload?.userId) {
@@ -153,15 +157,20 @@ export const getUser = cache(async () => {
    });
 });
 
+export const getToken = cache(async () => {
+   const cookieStore = await cookies();
+   return cookieStore.get("token")?.value;
+});
+
 //  Logout / Hapus session
 export async function deleteSession() {
-   const token = (await cookies()).get("session")?.value;
+   const token = (await cookies()).get("token")?.value;
    const payload = await decrypt(token);
 
    if (payload?.sessionId) {
       await prisma.authSession.deleteMany({ where: { id: payload.sessionId } });
    }
-   (await cookies()).delete("session");
+   await deleteCookie();
    redirect("/login");
 }
 

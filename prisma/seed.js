@@ -2,24 +2,19 @@ const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
 const prisma = new PrismaClient();
 
- 
-
 async function main() {
    const users = [
       {
-         
-         name: "ayla azzura",
-         email: "aylaazzura2209@gmail.com",
+         name: "admin",
+         email: "admin@admin.com",
          password: bcrypt.hashSync("12345678", 10),
-         role:"ADMIN"
-
+         role: "ADMIN",
       },
    ];
    await prisma.user.createMany({
       data: users,
       skipDuplicates: true,
    });
- 
 }
 
 main()
@@ -32,6 +27,7 @@ main()
       process.exit(1);
    });
 
+// atau: npx prisma db seed
+
 // npx prisma migrate reset
 // npx prisma migrate dev
-// atau: npx prisma db seed
