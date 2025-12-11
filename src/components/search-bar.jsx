@@ -32,7 +32,7 @@ export default function SearchBar({
          params.delete("search");
       }
 
-      navigate(`${pathname}?${params.toString()}`);
+      navigate(`/makanan?${params.toString()}`);
    };
 
    const handleClear = () => {
@@ -40,7 +40,7 @@ export default function SearchBar({
       const params = new URLSearchParams(searchParams.toString());
       params.delete("search");
       params.delete("page");
-      navigate(`${pathname}?${params.toString()}`);
+      navigate(`/makanan?${params.toString()}`);
    };
 
    return (

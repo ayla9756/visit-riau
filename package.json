@@ -27,6 +27,7 @@
     "nextjs-toploader": "^3.9.17",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "server": "link:@imagekit/next/server",
     "sonner": "^2.0.7",
     "sooner": "^1.1.4",
     "tailwind-merge": "^3.3.1",
