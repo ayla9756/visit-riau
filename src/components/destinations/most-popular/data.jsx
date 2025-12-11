@@ -27,7 +27,7 @@ export function Data({ query }) {
                return (
                   <Link
                      key={makanan.id}
-                     href={`/makanan/${makanan.slug || makanan.id}`}
+                     href={`/makanan/${makanan.id}/preview`}
                      className="group relative overflow-hidden rounded-xl bg-white shadow hover:shadow-xl transition-shadow"
                   >
                      {/* Image */}
