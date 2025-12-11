@@ -19,7 +19,7 @@ export async function getFood({
                  OR: [
                     { nama: { contains: search, mode: "insensitive" } },
                     { deskripsi: { contains: search, mode: "insensitive" } },
-                    { alamat: { contains: search, mode: "insensitive" } },
+                    { asal: { contains: search, mode: "insensitive" } },
                  ],
               }
             : {},
