@@ -27,7 +27,7 @@ export async function action(formData) {
 
    await createSession(user);
 
-   return redirect("/");
+   return { success: true };
 }
 
 // Logout Action

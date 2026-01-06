@@ -4,5 +4,5 @@ import Data from "./data";
 export async function MakananByCategory() {
    const query = await getCategories({});
 
-   return <Data query={query} />;
+   return <Data data={query} />;
 }

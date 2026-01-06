@@ -3,6 +3,7 @@ import Data from "./data";
 import { withMetadata } from "@/lib/metadata";
 import SearchBar from "@/components/search-bar";
 import { TambahMakanan } from "@/components/button/form-button";
+import LinkKategori from "@/components/button/link-kategori";
 
 export const generateMetadata = withMetadata("Makanan");
 
@@ -15,7 +16,10 @@ export default async function Page({ searchParams }) {
       <div className="max-w-6xl mx-auto w-full space-y-4 p-8">
          <div className="flex justify-between gap-4">
             <h1 className="text-xl">Galeri Kuliner</h1>
-            <TambahMakanan />
+            <div className="flex items-center gap-2">
+               <LinkKategori />
+               <TambahMakanan />
+            </div>
          </div>
          <div>{kategori && `Kategori : ${kategori}`} </div>
          <SearchBar />

@@ -41,7 +41,7 @@ export default async function Page({ params }) {
          </h1>
 
          <div className="space-y-2">
-            <Form data={data} categories={queryCategory?.data} />
+            <Form data={data} categories={queryCategory} />
          </div>
       </div>
    );

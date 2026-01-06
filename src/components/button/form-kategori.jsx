@@ -1,37 +1,4 @@
 "use client";
-
-import { useAuthStore } from "@/store/auth";
-import { Button, buttonVariants } from "../ui/button";
-import Link from "next/link";
-import { PencilIcon, TrashIcon } from "lucide-react";
-
-export function TambahMakanan() {
-   const { isLoggedIn } = useAuthStore();
-
-   if (!isLoggedIn) return null;
-
-   return (
-      <Link href="/makanan/new/form" className={buttonVariants()}>
-         Tambah
-      </Link>
-   );
-}
-
-export function EditMakanan({ id }) {
-   const { isLoggedIn } = useAuthStore();
-
-   if (!isLoggedIn) return null;
-
-   return (
-      <Link
-         href={`/makanan/${id}/form`}
-         className={buttonVariants({ variant: "outline", size: "icon" })}
-      >
-         <PencilIcon className="size-4" />
-      </Link>
-   );
-}
-
 import {
    Dialog,
    DialogContent,
@@ -40,11 +7,14 @@ import {
    DialogTitle,
 } from "@/components/ui/dialog";
 import { useState, useTransition } from "react";
-import { deleteMakanan } from "@/lib/delete-data";
+import { deleteKategori } from "@/lib/delete-data";
 import { useNavigate } from "@/hooks/use-navigate";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { TrashIcon } from "lucide-react";
+import { useAuthStore } from "@/store/auth";
 
-export function HapusMakanan({ id, backUrl = "/makanan" }) {
+export function HapusKategori({ id, backUrl = "/kategori" }) {
    const { isLoggedIn } = useAuthStore();
    const [open, setOpen] = useState(false);
    const [isPending, startTransition] = useTransition();
@@ -52,8 +22,9 @@ export function HapusMakanan({ id, backUrl = "/makanan" }) {
 
    const handleDelete = async () => {
       startTransition(async () => {
-         await deleteMakanan(id);
+         await deleteKategori(id);
          toast.success("Data berhasil dihapus");
+         setOpen(false);
          navigate(backUrl);
       });
    };
