@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Star, Eye, MapPin } from "lucide-react";
+import Image from "next/image";
 
 export function Data({ query }) {
    const { data = [] } = query;
@@ -9,9 +10,6 @@ export function Data({ query }) {
 
    return (
       <div className="w-full max-w-6xl mx-auto px-4 py-6">
-         <h1 className="mb-10 text-center text-xl font-semibold underline underline-offset-4">
-            Most Popular
-         </h1>
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.map((makanan) => {
                const imageUrl = makanan.images?.[0]?.imageUrl;
@@ -28,21 +26,24 @@ export function Data({ query }) {
                   <Link
                      key={makanan.id}
                      href={`/makanan/${makanan.id}/preview`}
-                     className="group relative overflow-hidden rounded-xl bg-white shadow hover:shadow-xl transition-shadow"
+                     className="group relative overflow-hidden rounded-xl bg-foreground/10 shadow hover:shadow-xl transition-shadow"
                   >
                      {/* Image */}
-                     <div className="aspect-video overflow-hidden">
-                        <img
+                     <div className="aspect-video overflow-hidden relative">
+                        <Image
                            src={
                               imageUrl ||
                               "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop"
                            }
+                           fill
+                           priority
+                           sizes="100%"
                            alt={makanan.nama}
                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
 
                         {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
 
                         {/* Top Info */}
                         <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
@@ -61,11 +62,11 @@ export function Data({ query }) {
                      {/* Content */}
                      <div className="p-4">
                         <div className="mb-2">
-                           <h3 className="font-semibold text-gray-900 line-clamp-1">
+                           <h3 className="font-semibold text-lg text-primary line-clamp-1">
                               {makanan.nama}
                            </h3>
                            {makanan.asal && (
-                              <div className="flex items-center gap-1 text-gray-600 text-sm mt-1">
+                              <div className="flex items-center gap-1 text-foreground/70 text-sm mt-1">
                                  <MapPin className="w-3 h-3" />
                                  <span>{makanan.asal}</span>
                               </div>

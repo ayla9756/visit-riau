@@ -1,12 +1,10 @@
-import MapEmbed from "@/components/map";
 import { getFood, getFoodById } from "@/lib/query";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { getFoodMetadata } from "@/lib/metadata";
 import FormKomentar from "./form-komentar";
 import { format } from "date-fns";
-import { EditMakanan } from "@/components/button/form-button";
+import { EditMakanan, HapusMakanan } from "@/components/button/form-button";
 import { StarIcon } from "lucide-react";
 
 export async function generateMetadata({ params }) {
@@ -40,6 +38,7 @@ export default async function Page({ params }) {
                </h1>
             </div>
             <EditMakanan id={data.id} />
+            <HapusMakanan id={data?.id} />
          </div>
 
          {/* Gallery Section */}

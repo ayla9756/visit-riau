@@ -11,7 +11,7 @@ export async function Food({ kategoriSlug }) {
    if (data.length === 0) return null;
 
    return (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
          {data.map((makanan) => {
             return (
                <Link

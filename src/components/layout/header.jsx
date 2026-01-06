@@ -30,18 +30,22 @@ export default function Header() {
    return (
       <header
          className={cn(
-            "sticky top-0 z-50 transition-all duration-300 bg-gradient-to-b from-primary/70 to-primary/30 backdrop-blur-md shadow-lg"
+            "sticky top-0 z-50 transition-all duration-300 bg-linear-to-b from-primary/70 to-primary/30 backdrop-blur-md shadow-lg"
          )}
       >
          <div className="flex justify-between gap-4 max-w-6xl mx-auto items-center px-4 py-5">
-            <Link
-               href="/"
-               className={cn(
-                  "cursor-pointer text-lg font-bold text-black inline-flex items-center gap-2"
-               )}
-            >
-               <Logo className="size-10" /> {SITE_NAME}
-            </Link>
+            <div className="flex gap-4 items-center">
+               <Link
+                  href="/"
+                  className={cn(
+                     "cursor-pointer text-lg font-bold text-black inline-flex items-center gap-2"
+                  )}
+               >
+                  <Logo className="size-10" /> {SITE_NAME}
+               </Link>
+               <Link href="/makanan">Galeri</Link>
+            </div>
+
             <div className="flex gap-3 items-center">
                <ToggleTheme />
                {isLoading ? (

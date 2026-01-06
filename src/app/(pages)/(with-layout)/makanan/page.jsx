@@ -12,7 +12,7 @@ export default async function Page({ searchParams }) {
    const query = await getFood({ search, page, limit, kategori });
 
    return (
-      <div className="max-w-6xl mx-auto w-full space-y-4 p-4">
+      <div className="max-w-6xl mx-auto w-full space-y-4 p-8">
          <div className="flex justify-between gap-4">
             <h1 className="text-xl">Galeri Kuliner</h1>
             <TambahMakanan />

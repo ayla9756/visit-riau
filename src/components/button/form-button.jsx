@@ -32,14 +32,63 @@ export function EditMakanan({ id }) {
    );
 }
 
-export function HapusMakanan() {
+import {
+   Dialog,
+   DialogContent,
+   DialogDescription,
+   DialogHeader,
+   DialogTitle,
+} from "@/components/ui/dialog";
+import { useState, useTransition } from "react";
+import { deleteData } from "@/lib/delete-data";
+import { useNavigate } from "@/hooks/use-navigate";
+import { toast } from "sonner";
+
+export function HapusMakanan({ id, backUrl = "/makanan" }) {
    const { isLoggedIn } = useAuthStore();
+   const [open, setOpen] = useState(false);
+   const [isPending, startTransition] = useTransition();
+   const navigate = useNavigate();
+
+   const handleDelete = async () => {
+      startTransition(async () => {
+         await deleteData(id);
+         toast.success("Data berhasil dihapus");
+         navigate(backUrl);
+      });
+   };
 
    if (!isLoggedIn) return null;
 
    return (
-      <Button variant="destructive" size="icon">
-         <TrashIcon className="size-4" />
-      </Button>
+      <>
+         <Button
+            variant="destructive"
+            size="icon"
+            onClick={() => setOpen(true)}
+         >
+            <TrashIcon className="size-4" />
+         </Button>
+         <Dialog open={open} onOpenChange={() => setOpen(false)}>
+            <DialogContent>
+               <DialogHeader>
+                  <DialogTitle>Hapus data</DialogTitle>
+                  <DialogDescription>
+                     Apakah anda yakin mau menghapus data ini?
+                  </DialogDescription>
+               </DialogHeader>
+               <div className="flex gap-2 justify-end">
+                  <Button variant="outline">Batal</Button>
+                  <Button
+                     variant="destructive"
+                     disabled={isPending}
+                     onClick={handleDelete}
+                  >
+                     Hapus
+                  </Button>
+               </div>
+            </DialogContent>
+         </Dialog>
+      </>
    );
 }
